@@ -42,7 +42,7 @@ Adafruit_DCMotor *L1_Motor = AFMS.getMotor(3);  //左2馬達接在M3
 void setup() {
   Serial.begin(57600);
 
-
+  //搖桿檢測
   error = ps2x.config_gamepad(PS2_CLK, PS2_CMD, PS2_ATT, PS2_DAT, pressures, rumble);
  
   if(error == 0) { // 如果控制器連接沒有問題，就顯示底下的訊息。
