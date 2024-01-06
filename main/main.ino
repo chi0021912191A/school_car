@@ -1,13 +1,10 @@
 #include <Wire.h>
 #include <PS2X_lib.h>    // 包含PS2函式庫
 #include <Adafruit_MotorShield.h>
-#include "Emakefun_MotorDriver.h"
+#include <Emakefun_MotorDriver.h>
 
 
-Emakefun_MotorDriver mMotorDriver = Emakefun_MotorDriver(0x60);
 
-Emakefun_Servo *mServo1 = mMotorDriver.getServo(1);
-Emakefun_Servo *mServo2 = mMotorDriver.getServo(2);
 
 
 // 搖桿設定
@@ -38,11 +35,21 @@ Adafruit_DCMotor *R1_Motor = AFMS.getMotor(1);  //右2馬達接在M1
 Adafruit_DCMotor *L0_Motor = AFMS.getMotor(4);  //左1馬達接在M4
 Adafruit_DCMotor *L1_Motor = AFMS.getMotor(3);  //左2馬達接在M3
 
+//伺服馬達設定
+Emakefun_MotorDriver mMotorDriver = Emakefun_MotorDriver(0x60);
+
+Emakefun_Servo *mServo1 = mMotorDriver.getServo(1);
+Emakefun_Servo *mServo2 = mMotorDriver.getServo(2);
+
+int angle;
+
+
 
 void setup() {
   Serial.begin(57600);
 
   //搖桿檢測
+    Serial.println("PS2 test!");
   error = ps2x.config_gamepad(PS2_CLK, PS2_CMD, PS2_ATT, PS2_DAT, pressures, rumble);
  
   if(error == 0) { // 如果控制器連接沒有問題，就顯示底下的訊息。
@@ -50,7 +57,7 @@ void setup() {
     Serial.println("Try out all the buttons, X will vibrate the controller, faster as you press harder;");
     Serial.println("holding L1 or R1 will print out the analog stick values.");
     Serial.println("Go to www.billporter.info for updates and to report bugs.");
- }
+  }
    
   else if(error == 1) // 找不到控制器，顯示底下的錯誤訊息。
     Serial.println("No controller found, check wiring, see readme.txt to enable debug. visit www.billporter.info for troubleshooting tips");
@@ -72,10 +79,11 @@ void setup() {
         case 2:
           Serial.println("GuitarHero Controller Found");  // 發現吉他英雄控制器
         break;
-     }
+      }
 
+  //初始化馬達
 
-  Serial.println("DC Motor test!");
+  Serial.println("DC Motor begin!");
 
   AFMS.begin();
 
@@ -93,6 +101,9 @@ void setup() {
   R1_Motor->run(RELEASE);
   L0_Motor->run(RELEASE);
   L1_Motor->run(RELEASE);
+
+  //初始化伺服馬達
+  
 
   
 }
